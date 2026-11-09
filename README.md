@@ -1,4 +1,43 @@
-# Moonlight PC
+# Moonlight PC: OLED theme for Windows on ARM
+
+[![Build](https://github.com/Zorithen/mt-oled/actions/workflows/build.yml/badge.svg)](https://github.com/Zorithen/mt-oled/actions/workflows/build.yml)
+
+My fork of [Moonlight PC](https://github.com/moonlight-stream/moonlight-qt), the open source game streaming client. It changes two things:
+
+- **True-black OLED theme.** The window background, toolbar, and tile fills are pure black (`#000000`), so on an OLED screen those pixels turn off and the box art floats on nothing. The selected game gets a soft blue glow (`#8EC5FF`) around its poster instead of a grey tile, and the buttons over the box art are dark glass.
+- **Windows ARM64 only.** This copy builds just the native ARM64 version for Snapdragon laptops and skips every other platform.
+
+## How it's built
+
+Every push to `main` runs a GitHub Actions workflow ([build.yml](.github/workflows/build.yml) calls [build-win-mac.yml](.github/workflows/build-win-mac.yml)) on a `windows-2025` runner. It:
+
+1. Pulls the dependencies with `setup-deps.ps1`
+2. Installs Qt 6.12 plus the ARM64 cross-compile kit
+3. Builds with `scripts\build-arch.bat Release arm64`
+4. Uploads the binaries and debug symbols as workflow artifacts
+
+I turned off Dependabot and the upstream bot workflows, since this fork only needs the one build.
+
+To get a build, open the latest successful run under **Actions** and download the `Moonlight-Windows-arm64-<version>` artifact. Downloading artifacts requires a GitHub login.
+
+## Where the theme changes are
+
+| File | What changed |
+| --- | --- |
+| `app/main.cpp` | Accent and toolbar colors |
+| `app/gui/main.qml` | Black window background |
+| `app/gui/AppView.qml` | Poster glow, button styling, game titles |
+| `app/gui/NavigableItemDelegate.qml` | Selection ring instead of a grey tile fill |
+
+Every change is marked with an `OLED theme:` comment, so searching for that finds them all.
+
+## Credit and license
+
+All the streaming work is Moonlight's. This fork is GPLv3, the same as upstream. The original README is below.
+
+---
+
+# Original Moonlight PC README
 
 [Moonlight PC](https://moonlight-stream.org) is an open source PC client for NVIDIA GameStream and [Sunshine](https://github.com/LizardByte/Sunshine).
 
